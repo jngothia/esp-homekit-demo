@@ -7,11 +7,11 @@ My first attempt at modifying Maxim's code (specifically the Sonoff S20 submodul
 
 ## Usage
 
-See [build instructions](https://github.com/maximkulkin/esp-homekit-demo/wiki/Build-instructions)
+See [build instructions](https://github.com/maximkulkin/esp-homekit-demo/wiki/Build-instructions).
 
 My first learning experience with the ESP8266 was through [this video](https://www.youtube.com/watch?v=QBj8OLig8Kg).
 
-The quick start guide:
+## The quick start guide:
 
 • go to terminal
 
