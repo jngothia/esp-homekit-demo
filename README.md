@@ -14,16 +14,25 @@ My first learning experience with the ESP8266 was through [this video](https://w
 The quick start guide:
 
 • go to terminal
+
 • cd to folder with VagrantFile
+
 • vagrant up (command)
 
 • open VirtualBox
+
 • add USB host controller in VirtualBox USB settings
 
 • cd to folder with VagrantFile
+
 • vagrant halt (command)
+
 • vagrant up (command)
+
 • vagrant ssh (command)
+
 • cd to esp-homekit-demo
+
 • git pull https://github.com/jngothia/esp-homekit-demo.git (command)
+
 • make -C examples/speaker_selector test
