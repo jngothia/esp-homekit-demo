@@ -89,10 +89,10 @@ void reset_configuration() {
 }
 
 homekit_characteristic_t A_switch_on = HOMEKIT_CHARACTERISTIC_(
-    ON, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(switch_on_callback)
+    ON, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(A_switch_on_callback)
 );
 homekit_characteristic_t B_switch_on = HOMEKIT_CHARACTERISTIC_(
-    ON, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(switch_on_callback)
+    ON, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(B_switch_on_callback)
 );
 
 void gpio_init() {
