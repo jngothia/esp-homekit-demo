@@ -110,11 +110,13 @@ void gpio_init() {
 // jngothia changed switch_on to A_switch_on
 void A_switch_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context) {
     relay0_write(A_switch_on.value.bool_value);
+    led0_write(A_switch_on.value.bool_value);
 }
 
 //jngothia added B_switch_on
 void B_switch_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context) {
     relay1_write(B_switch_on.value.bool_value);
+    led1_write(B_switch_on.value.bool_value);
 }
 
 // jngothia changed button_callback to A_button_callback
@@ -124,6 +126,7 @@ void A_button_callback(uint8_t gpio, button_event_t event) {
             printf("Toggling relay A\n");
             A_switch_on.value.bool_value = !A_switch_on.value.bool_value;
             relay0_write(A_switch_on.value.bool_value);
+            led0_write(A_switch_on.value.bool_value);
             homekit_characteristic_notify(&A_switch_on, A_switch_on.value);
             break;
         case button_event_long_press:
@@ -141,6 +144,7 @@ void B_button_callback(uint8_t gpio, button_event_t event) {
             printf("Toggling relay B\n");
             B_switch_on.value.bool_value = !B_switch_on.value.bool_value;
             relay1_write(B_switch_on.value.bool_value);
+            led1_write(B_switch_on.value.bool_value);
             homekit_characteristic_notify(&B_switch_on, B_switch_on.value);
             break;
         case button_event_long_press:
@@ -192,14 +196,14 @@ homekit_accessory_t *accessories[] = {
             NULL
         }),
         HOMEKIT_SERVICE(OUTLET, .primary=true, .characteristics=(homekit_characteristic_t*[]){
-            HOMEKIT_CHARACTERISTIC(NAME, "A Speakers"),
-            &A_switch_on,
+            HOMEKIT_CHARACTERISTIC(NAME, "B Speakers"),
+            &B_switch_on,
  	      HOMEKIT_CHARACTERISTIC(OUTLET_IN_USE, true),
             NULL
         }),
         HOMEKIT_SERVICE(OUTLET, .primary=true, .characteristics=(homekit_characteristic_t*[]){
-            HOMEKIT_CHARACTERISTIC(NAME, "B Speakers"),
-            &B_switch_on,
+            HOMEKIT_CHARACTERISTIC(NAME, "A Speakers"),
+            &A_switch_on,
  	      HOMEKIT_CHARACTERISTIC(OUTLET_IN_USE, true),
             NULL
         }),
