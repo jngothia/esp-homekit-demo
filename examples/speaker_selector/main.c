@@ -238,7 +238,11 @@ void user_init(void) {
     wifi_config_init("speaker-selector", NULL, on_wifi_ready);
     gpio_init();
 
-    if (button_create(button_gpio, 0, 10000, button_callback)) {
-        printf("Failed to initialize button\n");
+    if (button_create(button0_gpio, 0, 10000, A_button_callback)) {
+        printf("Failed to initialize button A\n");
+    }
+    
+    if (button_create(button1_gpio, 0, 10000, B_button_callback)) {
+        printf("Failed to initialize button B\n");
     }
 }
