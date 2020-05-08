@@ -189,7 +189,7 @@ homekit_accessory_t *accessories[] = {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
             &name,
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "jngothia"),
-            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "4095159335A1"),
+            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "4095159335A2"),
             HOMEKIT_CHARACTERISTIC(MODEL, "Speaker Selector"),
             HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "0.0.1"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, switch_identify),
