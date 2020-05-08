@@ -1,5 +1,6 @@
 /*
- * jngothia's attempt to edit maximkulkin/esp-homekit-demo to work for my ESP8266
+ * jngothia's attempt to edit maximkulkin/esp-homekit-demo to work for my ESP8266 in order to create a A/B 
+ * stereo selector switch, with a button and an LED for each relay.  Based on Maxim Kulkin's Sonoff S20 code.
  */
 
 #include <stdio.h>
@@ -15,13 +16,15 @@
 #include <homekit/characteristics.h>
 #include <wifi_config.h>
 
+// jngothia - Button code expects low voltage to indicate button is pressed(?), so button pins need to be pulled up
 #include "button.h"
 
-// D2 The GPIO pin that is connected to the relay on the Sonoff Basic.
+// D2 The GPIO pin that is connected to the relay on the ESP8266.
 const int relay0_gpio = 4;
-// D4 The GPIO pin that is connected to the LED on the Sonoff Basic.
+// D4 The GPIO pin that is connected to the LED on the ESP8266.  
+// Note this pin must be held high with pullup resistor to ensure boot of ESP8266.
 const int led0_gpio = 2;
-// D5 The GPIO pin that is connected to the button on the Sonoff Basic.
+// D5 The GPIO pin that is connected to the button on the ESP8266.
 const int button0_gpio = 14;
 
 // jngothia b speakers
@@ -39,6 +42,7 @@ void A_button_callback(uint8_t gpio, button_event_t event);
 void B_switch_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context);
 void B_button_callback(uint8_t gpio, button_event_t event);
 
+// jngothia's ugly code with a function for writing to each pin)
 void relay0_write(bool on) {
     gpio_write(relay0_gpio, on ? 1 : 0);
 }
@@ -100,7 +104,7 @@ void gpio_init() {
     led0_write(false);
     gpio_enable(relay0_gpio, GPIO_OUTPUT);
     relay0_write(A_switch_on.value.bool_value);  // jngothia changed switch_on to A_switch_on
-    // jngothia new switch
+    // jngothia new switch for B speakers
     gpio_enable(led1_gpio, GPIO_OUTPUT);
     led1_write(false);
     gpio_enable(relay1_gpio, GPIO_OUTPUT);
@@ -137,7 +141,7 @@ void A_button_callback(uint8_t gpio, button_event_t event) {
     }
 }
 
-// jngothia changed button_callback to A_button_callback
+// jngothia added B_button_callback
 void B_button_callback(uint8_t gpio, button_event_t event) {
     switch (event) {
         case button_event_single_press:
@@ -155,9 +159,8 @@ void B_button_callback(uint8_t gpio, button_event_t event) {
     }
 }
 
-
 void switch_identify_task(void *_args) {
-    // We identify the Sonoff by Flashing it's LED.
+    // We identify the speaker selector by flashing it's LEDs.
     for (int i=0; i<3; i++) {
         for (int j=0; j<2; j++) {
             led0_write(true);
@@ -184,6 +187,7 @@ void switch_identify(homekit_value_t _value) {
 
 homekit_characteristic_t name = HOMEKIT_CHARACTERISTIC_(NAME, "Speaker Selector");
 
+//homekit appears to arrange the services in the reverse order that they appear, hence A Speakers are defined last?
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_outlet, .services=(homekit_service_t*[]){
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
