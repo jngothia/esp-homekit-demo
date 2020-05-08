@@ -97,12 +97,12 @@ homekit_characteristic_t B_switch_on = HOMEKIT_CHARACTERISTIC_(
 
 void gpio_init() {
     gpio_enable(led0_gpio, GPIO_OUTPUT);
-    led0_write(false);
+    led0_write(A_switch_on.value.bool_value);
     gpio_enable(relay0_gpio, GPIO_OUTPUT);
     relay0_write(A_switch_on.value.bool_value);  // jngothia changed switch_on to A_switch_on
     // jngothia new switch
     gpio_enable(led1_gpio, GPIO_OUTPUT);
-    led1_write(false);
+    led1_write(B_switch_on.value.bool_value);
     gpio_enable(relay1_gpio, GPIO_OUTPUT);
     relay1_write(B_switch_on.value.bool_value);
 }
