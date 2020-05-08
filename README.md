@@ -31,6 +31,8 @@ My first learning experience with the ESP8266 was through [this video](https://w
 
 • vagrant ssh (command)
 
+• usb-devices (command to see if USB on ESP8266 is recognized)
+
 • cd to esp-homekit-demo
 
 • git pull https://github.com/jngothia/esp-homekit-demo.git (command)
