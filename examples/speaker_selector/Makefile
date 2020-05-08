@@ -1,4 +1,4 @@
-PROGRAM = sonoff_basic
+PROGRAM = speaker_selector
 
 EXTRA_COMPONENTS = \
 	extras/http-parser \
