@@ -37,18 +37,18 @@ const int led1_gpio = 13;
 #include "toggle.h"
 // D5 The GPIO pins that are connected to the external buttons on the speaker selector.
 const int toggle0_gpio = 14;
-void A_toggle_callback(uint8_t gpio);
+void toggle0_callback(uint8_t gpio);
 // D6 jngothia next line addition of second toggle switch
 const int toggle1_gpio = 12;
-void B_toggle_callback(uint8_t gpio);
+void toggle1_callback(uint8_t gpio);
 //
 
-// changed switch_on_callback to A_switch_on_callback, and button to A_button, maybe unnecessary but wanted to avoid conflicts?
+// changed switch_on_callback to A_switch_on_callback, and button to button0, maybe unnecessary but wanted to avoid conflicts?
 void A_switch_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context);
-void A_button_callback(uint8_t gpio, button_event_t event);
+void button0_callback(uint8_t gpio, button_event_t event);
 // jngothia added these, maybe unecessarily duplicative?
-void B_switch_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context);
-void B_button_callback(uint8_t gpio, button_event_t event);
+//void B_switch_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context);
+//void B_button_callback(uint8_t gpio, button_event_t event);
 
 // jngothia's ugly code with a function for writing to each pin)
 void relay0_write(bool on) {
@@ -125,16 +125,16 @@ void A_switch_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, voi
 }
 
 //jngothia added B_switch_on
-void B_switch_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context) {
-    relay1_write(B_switch_on.value.bool_value);
-    led1_write(B_switch_on.value.bool_value);
-}
+//void B_switch_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context) {
+//    relay1_write(B_switch_on.value.bool_value);
+//    led1_write(B_switch_on.value.bool_value);
+//}
 
-// jngothia changed button_callback to A_button_callback
-void A_button_callback(uint8_t gpio, button_event_t event) {
+// jngothia changed button_callback to button0_callback
+void button0_callback(uint8_t gpio, button_event_t event) {
     switch (event) {
         case button_event_single_press:
-            printf("Toggling relay A due to button at GPIO %2d\n", gpio);
+            printf("Switching relay A due to button0 at GPIO %2d\n", gpio);
             A_switch_on.value.bool_value = !A_switch_on.value.bool_value;
             relay0_write(A_switch_on.value.bool_value);
             led0_write(A_switch_on.value.bool_value);
@@ -149,26 +149,26 @@ void A_button_callback(uint8_t gpio, button_event_t event) {
 }
 
 // jngothia added B_button_callback
-void B_button_callback(uint8_t gpio, button_event_t event) {
-    switch (event) {
-        case button_event_single_press:
-            printf("Toggling relay B due to button at GPIO %2d\n", gpio);
-            B_switch_on.value.bool_value = !B_switch_on.value.bool_value;
-            relay1_write(B_switch_on.value.bool_value);
-            led1_write(B_switch_on.value.bool_value);
-            homekit_characteristic_notify(&B_switch_on, B_switch_on.value);
-            break;
-        case button_event_long_press:
-            reset_configuration();
-            break;
-        default:
-            printf("Unknown button event: %d\n", event);
-    }
-}
+// void B_button_callback(uint8_t gpio, button_event_t event) {
+//    switch (event) {
+//       case button_event_single_press:
+//            printf("Toggling relay B due to button at GPIO %2d\n", gpio);
+//            B_switch_on.value.bool_value = !B_switch_on.value.bool_value;
+//            relay1_write(B_switch_on.value.bool_value);
+//            led1_write(B_switch_on.value.bool_value);
+//            homekit_characteristic_notify(&B_switch_on, B_switch_on.value);
+//            break;
+//        case button_event_long_press:
+//            reset_configuration();
+//            break;
+//        default:
+//            printf("Unknown button event: %d\n", event);
+//    }
+//}
 
 // NEW TOGGLE CODE
-void A_toggle_callback(uint8_t gpio) {
-            printf("Toggling relay A due to switch at GPIO %2d\n", gpio);
+void toggle0_callback(uint8_t gpio) {
+            printf("Toggling relay A due to toggle0 at GPIO %2d\n", gpio);
             A_switch_on.value.bool_value = !A_switch_on.value.bool_value;
             relay0_write(A_switch_on.value.bool_value);
             led0_write(A_switch_on.value.bool_value);
@@ -176,8 +176,8 @@ void A_toggle_callback(uint8_t gpio) {
 }
 
 //jngothia added toggle B code
-void B_toggle_callback(uint8_t gpio) {
-            printf("Toggling relay B due to switch at GPIO %2d\n", gpio);
+void toggle1_callback(uint8_t gpio) {
+            printf("Toggling relay B due to toggle1 at GPIO %2d\n", gpio);
             B_switch_on.value.bool_value = !B_switch_on.value.bool_value;
             relay1_write(B_switch_on.value.bool_value);
             led1_write(B_switch_on.value.bool_value);
@@ -273,15 +273,15 @@ void user_init(void) {
     wifi_config_init("speaker-selector", NULL, on_wifi_ready);
     gpio_init();
 
-    if (button_create(button0_gpio, 0, 10000, A_button_callback)) {
+    if (button_create(button0_gpio, 0, 10000, button0_callback)) {
         printf("Failed to initialize button A\n");
     }
     
-    if (toggle_create(toggle0_gpio, A_toggle_callback)) {
+    if (toggle_create(toggle0_gpio, toggle0_callback)) {
         printf("Failed to initialize toggle A\n");
     }
     
-    if (toggle_create(toggle1_gpio, B_toggle_callback)) {
+    if (toggle_create(toggle1_gpio, toggle1_callback)) {
         printf("Failed to initialize toggle B\n");
     }
 }
