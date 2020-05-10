@@ -201,8 +201,8 @@ void switch_identify_task(void *_args) {
         vTaskDelay(250 / portTICK_PERIOD_MS);
     }
 
-    led0_write(false);
-    led1_write(false);
+    led0_write(A_switch_on.value.bool_value);
+    led1_write(B_switch_on.value.bool_value);
 
     vTaskDelete(NULL);
 }
