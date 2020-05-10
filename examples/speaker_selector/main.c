@@ -97,9 +97,9 @@ void reset_configuration() {
 homekit_characteristic_t A_switch_on = HOMEKIT_CHARACTERISTIC_(
     ON, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(A_switch_on_callback)
 );
-//homekit_characteristic_t B_switch_on = HOMEKIT_CHARACTERISTIC_(
-//    ON, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(B_switch_on_callback)
-//);
+homekit_characteristic_t B_switch_on = HOMEKIT_CHARACTERISTIC_(
+    ON, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(B_switch_on_callback)
+);
 
 void gpio_init() {
     gpio_enable(led0_gpio, GPIO_OUTPUT);
@@ -125,10 +125,10 @@ void A_switch_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, voi
 }
 
 //jngothia added B_switch_on
-//void B_switch_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context) {
-//    relay1_write(B_switch_on.value.bool_value);
-//    led1_write(B_switch_on.value.bool_value);
-//}
+void B_switch_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context) {
+    relay1_write(B_switch_on.value.bool_value);
+    led1_write(B_switch_on.value.bool_value);
+}
 
 // jngothia changed button_callback to button0_callback
 void button0_callback(uint8_t gpio, button_event_t event) {
