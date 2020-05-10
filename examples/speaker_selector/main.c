@@ -47,8 +47,8 @@ void toggle1_callback(uint8_t gpio);
 void A_switch_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context);
 void button0_callback(uint8_t gpio, button_event_t event);
 // jngothia added these, maybe unecessarily duplicative?
-//void B_switch_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context);
-//void B_button_callback(uint8_t gpio, button_event_t event);
+void B_switch_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context);
+void button1_callback(uint8_t gpio, button_event_t event);
 
 // jngothia's ugly code with a function for writing to each pin)
 void relay0_write(bool on) {
