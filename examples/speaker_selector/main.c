@@ -35,7 +35,7 @@ const int led1_gpio = 13;
 
 // NEW TOGGLE CODE
 #include "toggle.h"
-// The GPIO pins that are connected to the external buttons on the speaker selector.
+// D5 The GPIO pins that are connected to the external buttons on the speaker selector.
 const int toggle0_gpio = 14;
 void A_toggle_callback(uint8_t gpio);
 // D6 jngothia next line addition of second toggle switch
@@ -177,7 +177,7 @@ void A_toggle_callback(uint8_t gpio) {
 
 //jngothia added toggle B code
 void B_toggle_callback(uint8_t gpio) {
-            printf("Toggling relay A due to switch at GPIO %2d\n", gpio);
+            printf("Toggling relay B due to switch at GPIO %2d\n", gpio);
             B_switch_on.value.bool_value = !B_switch_on.value.bool_value;
             relay1_write(B_switch_on.value.bool_value);
             led1_write(B_switch_on.value.bool_value);
