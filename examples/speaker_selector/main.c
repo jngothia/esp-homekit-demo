@@ -24,16 +24,24 @@ const int relay0_gpio = 4;
 // D4 The GPIO pin that is connected to the LED on the ESP8266.  
 // Note this pin must be held high with pullup resistor to ensure boot of ESP8266.
 const int led0_gpio = 2;
-// D5 The GPIO pin that is connected to the button on the ESP8266.
-const int button0_gpio = 14;
+// RX The GPIO pin that is connected to the button on the ESP8266.
+const int button0_gpio = 3;
 
 // jngothia b speakers
 // D1
 const int relay1_gpio = 5;
 // D7
 const int led1_gpio = 13;
-// D6
-const int button1_gpio = 12;
+
+// NEW TOGGLE CODE
+#include "toggle.h"
+// The GPIO pins that are connected to the external buttons on the speaker selector.
+const int toggle0_gpio = 14;
+void A_toggle_callback(uint8_t gpio);
+// D6 jngothia next line addition of second toggle switch
+const int toggle1_gpio = 12;
+void B_toggle_callback(uint8_t gpio);
+//
 
 // changed switch_on_callback to A_switch_on_callback, and button to A_button, maybe unnecessary but wanted to avoid conflicts?
 void A_switch_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, void *context);
@@ -60,30 +68,24 @@ void led1_write(bool on) {
 }
 
 void reset_configuration_task() {
-    //Flash the LED first before we start the reset
+    //Flash the LEDs first before we start the reset
     for (int i=0; i<3; i++) {
         led0_write(true);
-        vTaskDelay(100 / portTICK_PERIOD_MS);
         led1_write(false);
+        vTaskDelay(100 / portTICK_PERIOD_MS);
+        led0_write(false);
+        led1_write(true);
         vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 
     printf("Resetting Wifi Config\n");
-
     wifi_config_reset();
-
     vTaskDelay(1000 / portTICK_PERIOD_MS);
-
     printf("Resetting HomeKit Config\n");
-
     homekit_server_reset();
-
     vTaskDelay(1000 / portTICK_PERIOD_MS);
-
     printf("Restarting\n");
-
     sdk_system_restart();
-
     vTaskDelete(NULL);
 }
 
@@ -109,6 +111,11 @@ void gpio_init() {
     led1_write(B_switch_on.value.bool_value);
     gpio_enable(relay1_gpio, GPIO_OUTPUT);
     relay1_write(B_switch_on.value.bool_value);
+    // NEW TOGGLE CODE
+    gpio_enable(toggle0_gpio, GPIO_INPUT);
+    //jngothia added next line toggle b
+    gpio_enable(toggle1_gpio, GPIO_INPUT);
+    //
 }
 
 // jngothia changed switch_on to A_switch_on
@@ -127,7 +134,7 @@ void B_switch_on_callback(homekit_characteristic_t *_ch, homekit_value_t on, voi
 void A_button_callback(uint8_t gpio, button_event_t event) {
     switch (event) {
         case button_event_single_press:
-            printf("Toggling relay A\n");
+            printf("Toggling relay A due to button at GPIO %2d\n", gpio);
             A_switch_on.value.bool_value = !A_switch_on.value.bool_value;
             relay0_write(A_switch_on.value.bool_value);
             led0_write(A_switch_on.value.bool_value);
@@ -145,7 +152,7 @@ void A_button_callback(uint8_t gpio, button_event_t event) {
 void B_button_callback(uint8_t gpio, button_event_t event) {
     switch (event) {
         case button_event_single_press:
-            printf("Toggling relay B\n");
+            printf("Toggling relay B due to button at GPIO %2d\n", gpio);
             B_switch_on.value.bool_value = !B_switch_on.value.bool_value;
             relay1_write(B_switch_on.value.bool_value);
             led1_write(B_switch_on.value.bool_value);
@@ -158,6 +165,26 @@ void B_button_callback(uint8_t gpio, button_event_t event) {
             printf("Unknown button event: %d\n", event);
     }
 }
+
+// NEW TOGGLE CODE
+void A_toggle_callback(uint8_t gpio) {
+            printf("Toggling relay A due to switch at GPIO %2d\n", gpio);
+            A_switch_on.value.bool_value = !A_switch_on.value.bool_value;
+            relay0_write(A_switch_on.value.bool_value);
+            led0_write(A_switch_on.value.bool_value);
+            homekit_characteristic_notify(&A_switch_on, A_switch_on.value);
+}
+
+//jngothia added toggle B code
+void B_toggle_callback(uint8_t gpio) {
+            printf("Toggling relay A due to switch at GPIO %2d\n", gpio);
+            B_switch_on.value.bool_value = !B_switch_on.value.bool_value;
+            relay1_write(B_switch_on.value.bool_value);
+            led1_write(B_switch_on.value.bool_value);
+            homekit_characteristic_notify(&B_switch_on, B_switch_on.value);
+}
+
+//
 
 void switch_identify_task(void *_args) {
     // We identify the speaker selector by flashing it's LEDs.
@@ -250,7 +277,11 @@ void user_init(void) {
         printf("Failed to initialize button A\n");
     }
     
-    if (button_create(button1_gpio, 0, 10000, B_button_callback)) {
-        printf("Failed to initialize button B\n");
+    if (toggle_create(toggle0_gpio, A_toggle_callback)) {
+        printf("Failed to initialize toggle A\n");
+    }
+    
+    if (toggle_create(toggle1_gpio, B_toggle_callback)) {
+        printf("Failed to initialize toggle B\n");
     }
 }
