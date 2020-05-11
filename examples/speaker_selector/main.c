@@ -221,7 +221,7 @@ homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_outlet, .services=(homekit_service_t*[]){
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
             &name,
-            HOMEKIT_CHARACTERISTIC(MANUFACTURER, "jngothia"),
+            HOMEKIT_CHARACTERISTIC(MANUFACTURER, "Jacob N. Gothia"),
             HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "4095159335A2"),
             HOMEKIT_CHARACTERISTIC(MODEL, "Speaker Selector"),
             HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "0.0.1"),
