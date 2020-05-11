@@ -55,16 +55,18 @@ void relay0_write(bool on) {
     gpio_write(relay0_gpio, on ? 1 : 0);
 }
 
+//changed 0 : 1 to 1 : 0 to hopefully sync led on with relay on rather than opposite
 void led0_write(bool on) {
-    gpio_write(led0_gpio, on ? 0 : 1);
+    gpio_write(led0_gpio, on ? 1 : 0);
 }
 
 void relay1_write(bool on) {
     gpio_write(relay1_gpio, on ? 1 : 0);
 }
 
+//changed 0 : 1 to 1 : 0 to hopefully sync led on with relay on rather than opposite
 void led1_write(bool on) {
-    gpio_write(led1_gpio, on ? 0 : 1);
+    gpio_write(led1_gpio, on ? 1 : 0);
 }
 
 void reset_configuration_task() {
