@@ -3,7 +3,7 @@ Forked demo of [Apple HomeKit accessory server
 library](https://github.com/maximkulkin/esp-homekit) by Maxim Kulkin.
 
 # speaker_selector
-My first attempt at modifying Maxim's code (specifically the Sonoff S20 submodule) to use an ESP8266 NodeMCU development board as an A/B Speaker Selector.  I added a relay, a button, and an LED for each of A Speakers and B Speakers, which is intended to be wired to an octocoupler relay board for passing audio signals when relays are engaged.  
+My first attempt at modifying Maxim's code (specifically the Sonoff S20 submodule) to use an ESP8266 NodeMCU development board as an A/B Speaker Selector.  I added a relay, a button, and an LED for each of A Speakers and B Speakers, which is intended to be wired to an optocoupler relay board for passing audio signals when relays are engaged.  
 
 ## Usage
 
